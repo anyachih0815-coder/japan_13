@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大家の日語 - 第 13 課：別々にお願いします</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, "Heiti TC", "Microsoft JhengHei", sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+        header {
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: white;
+            color: #4a90e2;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .badge {
+            background-color: #e1f0ff;
+            color: #0066cc;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .review-badge {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .btn-sound {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-sound:hover {
+            background: #c8e6c9;
+        }
+        .card-body {
+            text-align: center;
+            padding: 20px 10px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .quiz-prompt {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        #vocab-question-text, #hw-question, #verb-masu {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .sentence-q {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        .jp-sentence-ans {
+            font-size: 1.4rem;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .input-section {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .input-section input {
+            width: 60%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .feedback-box.correct {
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #2e7d32;
+        }
+        .feedback-box.wrong {
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #c62828;
+        }
+        .feedback-status {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .feedback-detail {
+            margin-top: 5px;
+            font-size: 0.95rem;
+        }
+        .answer-container {
+            margin-top: 15px;
+        }
+        .feedback-box.hidden {
+            display: none;
+        }
+        .meaning {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .sub-meaning {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .quiz-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary { background: #4a90e2; color: white; }
+        .btn-primary:hover { background: #357abd; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #e0e0e0; }
+        .verb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .search-box {
+            margin: 15px 0;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+        @media (max-width: 600px) {
+            #vocab-question-text, #hw-question, #verb-masu { font-size: 1.8rem; }
+            .input-section input { width: 100%; }
+            .quiz-controls { flex-direction: row; }
+            .btn { flex: 1; text-align: center; padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌸 大家の日語 (第 13 課專題)</h1>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'vocab-quiz')">🎲 單字卡片 (前後切換)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'sentence-quiz')">💬 句子測驗 (前後切換)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'handwriting-quiz')">✍️ 手寫測驗</button>
+            <button class="tab-btn" onclick="switchTab(event, 'verb-practice')">⚡ 動詞變化練習</button>
+            <button class="tab-btn" onclick="switchTab(event, 'list')">📚 第 13 課單字列表</button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- 1. 單字卡片 (含上一個 / 下一個) -->
+        <section id="vocab-quiz-section" class="card tab-content active">
+            <div class="mode-selector">
+                <label><input type="radio" name="vocabMode" value="jp-zh" checked onchange="setVocabMode('jp-zh')"> 看日文猜中文</label>
+                <label><input type="radio" name="vocabMode" value="zh-jp" onchange="setVocabMode('zh-jp')"> 看中文猜日文</label>
+            </div>
+            <div class="quiz-header">
+                <span class="badge" id="vocab-category">第 13 課</span>
+                <button class="btn-sound" onclick="speakVocab()">🔊 聽發音</button>
+            </div>
+            
+            <div class="card-body">
+                <p class="quiz-prompt" id="vocab-prompt-label">請猜出意思是：</p>
+                <h2 id="vocab-question-text">載入中...</h2>
+                <div id="vocab-answer-container" class="answer-container" style="display: none;">
+                    <hr>
+                    <p id="vocab-answer-text" class="meaning"></p>
+                    <p id="vocab-extra-text" class="sub-meaning"></p>
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" onclick="prevVocabQuestion()">⬅️ 上一個</button>
+                <button class="btn btn-secondary" onclick="toggleVocabAnswer()">👁️ 顯示/隱藏答案</button>
+                <button class="btn btn-primary" onclick="nextVocabQuestion()">➡️ 下一個</button>
+            </div>
+        </section>
+
+        <!-- 2. 句子測驗 (含上一個 / 下一個) -->
+        <section id="sentence-quiz-section" class="card tab-content">
+            <h2>💬 句子測驗 (第 13 課句型與會話)</h2>
+            <div class="card-body">
+                <p class="quiz-prompt">請將下列中文翻譯成日文：</p>
+                <h3 id="sentence-question-text" class="sentence-q">載入中...</h3>
+                
+                <div id="sentence-answer-container" class="answer-container" style="display: none;">
+                    <hr>
+                    <p id="sentence-answer-text" class="jp-sentence-ans"></p>
+                    <button class="btn-sound mt-10" onclick="speakSentence()">🔊 聽日文朗讀</button>
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" onclick="prevSentenceQuestion()">⬅️ 上一句</button>
+                <button class="btn btn-secondary" onclick="toggleSentenceAnswer()">👁️ 顯示答案</button>
+                <button class="btn btn-primary" onclick="nextSentenceQuestion()">➡️ 下一句</button>
+            </div>
+        </section>
+
+        <!-- 3. 手寫測驗 -->
+        <section id="handwriting-quiz-section" class="card tab-content">
+            <div class="quiz-header">
+                <h2>✍️ 手寫與打字測驗</h2>
+                <span class="review-badge" id="hw-review-badge">待複習錯題：0</span>
+            </div>
+
+            <div class="card-body">
+                <span class="badge" id="hw-category">第 13 課</span>
+                <p class="quiz-prompt" style="margin-top: 10px;">請輸入相對應的日文（平假名/片假名/漢字）：</p>
+                <h2 id="hw-question">題目載入中...</h2>
+
+                <div class="input-section">
+                    <input type="text" id="hw-user-input" placeholder="請在此輸入日文答案..." autocomplete="off">
+                    <button class="btn btn-primary" onclick="checkHandwritingAnswer()">🔍 比對手寫答案</button>
+                </div>
+
+                <div id="hw-feedback-container" class="feedback-box hidden">
+                    <div id="hw-feedback-status" class="feedback-status"></div>
+                    <div id="hw-feedback-detail" class="feedback-detail"></div>
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" onclick="nextHandwritingQuestion()">⏭️ 略過此題</button>
+                <button class="btn btn-primary" onclick="nextHandwritingQuestion()">🎲 下一題</button>
+            </div>
+        </section>
+
+        <!-- 4. 動詞變化練習 (第 13 課重點：たい形) -->
+        <section id="verb-practice-section" class="card tab-content">
+            <h2>⚡ 第 13 課動詞變化練習 (ます / 辭書 / ない / たい形)</h2>
+            <p class="hint-text">訓練第 13 課核心「想做～（～たいです）」與原形、否定轉換！</p>
+            
+            <div class="card-body verb-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge" id="verb-group">動詞分類</span>
+                    <button class="btn-sound" onclick="speakCurrentVerb()">🔊 聽發音</button>
+                </div>
+                <h2 id="verb-masu">載入中...</h2>
+                <p id="verb-meaning" class="sub-meaning"></p>
+
+                <div id="verb-answer-container" class="answer-container" style="display: none;">
+                    <hr>
+                    <div class="verb-grid">
+                        <div><strong>ます形：</strong><span id="verb-ans-masu"></span></div>
+                        <div><strong>辭書形 (原形)：</strong><span id="verb-ans-dict"></span></div>
+                        <div><strong>ない形 (否定)：</strong><span id="verb-ans-nai"></span></div>
+                        <div><strong>たい形 (想做)：</strong><span id="verb-ans-tai" style="color: #e74c3c; font-weight: bold;"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" onclick="prevVerbQuestion()">⬅️ 上一個動詞</button>
+                <button class="btn btn-secondary" onclick="toggleVerbAnswer()">👁️ 查看變化</button>
+                <button class="btn btn-primary" onclick="nextVerbQuestion()">➡️ 下一個動詞</button>
+            </div>
+        </section>
+
+        <!-- 5. 全部單字列表 -->
+        <section id="list-section" class="card tab-content">
+            <h2>📚 第 13 課單字總覽</h2>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="搜尋日文、平假名或中文..." oninput="filterWords()">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>發音</th>
+                            <th>假名 / 外來語</th>
+                            <th>漢字</th>
+                            <th>中文翻譯</th>
+                        </tr>
+                    </thead>
+                    <tbody id="word-table-body">
+                        <!-- JS 動態填入 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- 【第 13 課完整單字庫】 ---
+        const vocabulary = [
+            { kana: "あそびます", kanji: "遊びます", zh: "玩、遊玩", cat: "第13課 動詞" },
+            { kana: "およぎます", kanji: "泳ぎます", zh: "游泳", cat: "第13課 動詞" },
+            { kana: "むかえます", kanji: "迎えます", zh: "迎接、接 (人)", cat: "第13課 動詞" },
+            { kana: "つかれます", kanji: "疲れます", zh: "累了、疲倦", cat: "第13課 動詞" },
+            { kana: "けっこんします", kanji: "結婚します", zh: "結婚", cat: "第13課 動詞" },
+            { kana: "かいものします", kanji: "買い物します", zh: "購物、買東西", cat: "第13課 動詞" },
+            { kana: "しょくじします", kanji: "食事します", zh: "吃飯、用餐", cat: "第13課 動詞" },
+            { kana: "さんぽします [こうえんを～]", kanji: "散歩します", zh: "散步 [在公園]", cat: "第13課 動詞" },
+            { kana: "たいへん[な]", kanji: "大変[な]", zh: "辛苦的、嚴重的、受不了的", cat: "第13課 な形容詞" },
+            { kana: "ほしい", kanji: "欲しい", zh: "想要 (某物)", cat: "第13課 い形容詞" },
+            { kana: "ひろい", kanji: "広い", zh: "寬敞、寬闊", cat: "第13課 い形容詞" },
+            { kana: "せまい", kanji: "狭い", zh: "狹窄", cat: "第13課 い形容詞" },
+            { kana: "プール", kanji: "", zh: "游泳池", cat: "第13課 名詞" },
+            { kana: "かわ", kanji: "川", zh: "河流", cat: "第13課 名詞" },
+            { kana: "びじゅつ", kanji: "美術", zh: "美術", cat: "第13課 名詞" },
+            { kana: "つり", kanji: "釣り", zh: "釣魚", cat: "第13課 名詞" },
+            { kana: "スキー", kanji: "", zh: "滑雪", cat: "第13課 名詞" },
+            { kana: "しゅうまつ", kanji: "週末", zh: "週末", cat: "第13課 時間" },
+            { kana: "[お]しょうがつ", kanji: "[お]正月", zh: "新年", cat: "第13課 時間" },
+            { kana: "～ごろ", kanji: "", zh: "～左右 (用於時間)", cat: "第13課 助詞" },
+            { kana: "なにか", kanji: "何か", zh: "什麼 (某物)", cat: "第13課 代詞" },
+            { kana: "どこか", kanji: "", zh: "某處、某個地方", cat: "第13課 代詞" },
+            { kana: "おなかがすきます", kanji: "お腹がすきます", zh: "肚子餓", cat: "第13課 會話" },
+            { kana: "のどがかわきます", kanji: "のどが渇きます", zh: "口渴", cat: "第13課 會話" },
+            { kana: "そうしましょう", kanji: "", zh: "就這麼辦吧！", cat: "第13課 會話" },
+            { kana: "べつべつに", kanji: "別々に", zh: "分別、各自分開", cat: "第13課 副詞" }
+        ];
+
+        // --- 【第 13 課精選會話句型】 ---
+        const sentences = [
+            { jp: "わたしは 車が 欲しいです。", zh: "我想要一台車。" },
+            { jp: "わたしは すしを 食べたいです。", zh: "我想吃壽司。" },
+            { jp: "フランスへ 料理を 習いに 行きます。", zh: "我要去法國學料理。" },
+            { jp: "今 何が 一番 欲しいですか。", zh: "現在最想要什麼？" },
+            { jp: "新しい ケータイが 欲しいです。", zh: "想要一支新手機。" },
+            { jp: "夏休みは どこへ 行きたいですか。", zh: "暑假想去哪裡？" },
+            { jp: "沖縄へ 行きたいです。", zh: "想去沖繩。" },
+            { jp: "別々に お願いします。", zh: "我們要分開結帳。" },
+            { jp: "お腹が すきましたね。何か 食べましょう。", zh: "肚子餓了呢。吃點什麼吧！" },
+            { jp: "そうしましょう。", zh: "就這麼辦吧！" }
+        ];
+
+        // --- 【第 13 課動詞變化庫】 ---
+        const verbs = [
+            { masu: "あそびます", kanji: "遊びます", dict: "あそぶ", nai: "あそばない", tai: "あそびたい", group: "I 類動詞", zh: "玩、遊玩" },
+            { masu: "およぎます", kanji: "泳ぎます", dict: "およぐ", nai: "およがない", tai: "およぎたい", group: "I 類動詞", zh: "游泳" },
+            { masu: "むかえます", kanji: "迎えます", dict: "むかえる", nai: "むかえない", tai: "むかえたい", group: "II 類動詞", zh: "迎接" },
+            { masu: "つかれます", kanji: "疲れます", dict: "つかれる", nai: "つかれない", tai: "つかれたい", group: "II 類動詞", zh: "疲倦、累" },
+            { masu: "けっこんします", kanji: "結婚します", dict: "けっこんする", nai: "けっこんしない", tai: "けっこんしたい", group: "III 類動詞", zh: "結婚" },
+            { masu: "かいものします", kanji: "買い物します", dict: "かいものする", nai: "かいものしない", tai: "かいものしたい", group: "III 類動詞", zh: "購物" },
+            { masu: "しょくじします", kanji: "食事します", dict: "しょくじする", nai: "しょくじしない", tai: "しょくじしたい", group: "III 類動詞", zh: "用餐" },
+            { masu: "さんぽします", kanji: "散歩します", dict: "さんぽする", nai: "さんぽしない", tai: "さんぽしたい", group: "III 類動詞", zh: "散步" },
+            { masu: "たべます", kanji: "食べます", dict: "たべる", nai: "たべない", tai: "たべたい", group: "II 類動詞", zh: "吃" },
+            { masu: "のみます", kanji: "飲みます", dict: "のむ", nai: "のまない", tai: "のみたい", group: "I 類動詞", zh: "喝" },
+            { masu: "いきます", kanji: "行きます", dict: "いく", nai: "いかない", tai: "いきたい", group: "I 類動詞", zh: "去" }
+        ];
+
+        let vocabMode = 'jp-zh';
+        let currentVocabIdx = 0;
+        let currentSentenceIdx = 0;
+        let currentVerbIdx = 0;
+
+        let hwMissedQuestions = [];
+        let hwCurrentItem = null;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function switchTab(e, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            e.target.classList.add('active');
+            document.getElementById(`${tabId}-section`).classList.add('active');
+        }
+
+        function normalizeText(text) {
+            if (!text) return "";
+            return text.toString().trim().toLowerCase()
+                .replace(/[\s\(\)\[\]（）「」\.\…\。\、\！\？\!\?ー\-]/g, '')
+                .replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+        }
+
+        /* --- 1. 單字卡區塊 --- */
+        function setVocabMode(mode) {
+            vocabMode = mode;
+            renderVocabQuestion();
+        }
+
+        function renderVocabQuestion() {
+            const item = vocabulary[currentVocabIdx];
+            document.getElementById("vocab-category").innerText = item.cat;
+            document.getElementById("vocab-answer-container").style.display = "none";
+
+            if (vocabMode === 'jp-zh') {
+                document.getElementById("vocab-prompt-label").innerText = "請猜出中文意思是：";
+                document.getElementById("vocab-question-text").innerText = item.kana;
+                document.getElementById("vocab-answer-text").innerText = item.zh;
+                document.getElementById("vocab-extra-text").innerText = (item.kanji && item.kanji.trim() !== '') ? `漢字：${item.kanji}` : '';
+            } else {
+                document.getElementById("vocab-prompt-label").innerText = "請猜出日文唸法是：";
+                document.getElementById("vocab-question-text").innerText = item.zh;
+                document.getElementById("vocab-answer-text").innerText = item.kana;
+                document.getElementById("vocab-extra-text").innerText = (item.kanji && item.kanji.trim() !== '') ? `漢字：${item.kanji}` : '';
+            }
+        }
+
+        function nextVocabQuestion() {
+            currentVocabIdx = (currentVocabIdx + 1) % vocabulary.length;
+            renderVocabQuestion();
+        }
+
+        function prevVocabQuestion() {
+            currentVocabIdx = (currentVocabIdx - 1 + vocabulary.length) % vocabulary.length;
+            renderVocabQuestion();
+        }
+
+        function toggleVocabAnswer() {
+            const box = document.getElementById("vocab-answer-container");
+            box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+        }
+
+        function speakVocab() {
+            speakText(vocabulary[currentVocabIdx].kana);
+        }
+
+        /* --- 2. 句子測驗區塊 --- */
+        function renderSentenceQuestion() {
+            const item = sentences[currentSentenceIdx];
+            document.getElementById("sentence-question-text").innerText = item.zh;
+            document.getElementById("sentence-answer-text").innerText = item.jp;
+            document.getElementById("sentence-answer-container").style.display = "none";
+        }
+
+        function nextSentenceQuestion() {
+            currentSentenceIdx = (currentSentenceIdx + 1) % sentences.length;
+            renderSentenceQuestion();
+        }
+
+        function prevSentenceQuestion() {
+            currentSentenceIdx = (currentSentenceIdx - 1 + sentences.length) % sentences.length;
+            renderSentenceQuestion();
+        }
+
+        function toggleSentenceAnswer() {
+            const box = document.getElementById("sentence-answer-container");
+            box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+        }
+
+        function speakSentence() {
+            speakText(sentences[currentSentenceIdx].jp);
+        }
+
+        /* --- 3. 手寫測驗 --- */
+        function updateHwBadge() {
+            document.getElementById("hw-review-badge").innerText = `待複習錯題：${hwMissedQuestions.length}`;
+        }
+
+        function nextHandwritingQuestion() {
+            document.getElementById("hw-user-input").value = "";
+            document.getElementById("hw-feedback-container").className = "feedback-box hidden";
+
+            if (hwMissedQuestions.length > 0 && Math.random() < 0.6) {
+                hwCurrentItem = hwMissedQuestions[0];
+            } else {
+                hwCurrentItem = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+            }
+
+            document.getElementById("hw-category").innerText = hwCurrentItem.cat;
+            document.getElementById("hw-question").innerText = hwCurrentItem.zh;
+            updateHwBadge();
+        }
+
+        function checkHandwritingAnswer() {
+            const userInput = document.getElementById("hw-user-input").value;
+            if (!userInput) return alert("請先輸入答案！");
+
+            const feedbackBox = document.getElementById("hw-feedback-container");
+            feedbackBox.classList.remove("hidden");
+
+            const cleanUser = normalizeText(userInput);
+            const cleanKana = normalizeText(hwCurrentItem.kana);
+            const cleanKanji = hwCurrentItem.kanji ? normalizeText(hwCurrentItem.kanji) : "";
+            const isCorrect = (cleanUser === cleanKana || (cleanKanji && cleanUser === cleanKanji));
+
+            if (isCorrect) {
+                feedbackBox.className = "feedback-box correct";
+                document.getElementById("hw-feedback-status").innerText = "🎉 比對正確！";
+                document.getElementById("hw-feedback-detail").innerHTML = `標準答案：<strong>${hwCurrentItem.kana}</strong> ${hwCurrentItem.kanji ? '(' + hwCurrentItem.kanji + ')' : ''}`;
+                
+                const existIdx = hwMissedQuestions.findIndex(q => q.kana === hwCurrentItem.kana);
+                if (existIdx !== -1) hwMissedQuestions.splice(existIdx, 1);
+                speakText(hwCurrentItem.kana);
+            } else {
+                feedbackBox.className = "feedback-box wrong";
+                document.getElementById("hw-feedback-status").innerText = "❌ 答錯了！已加入錯題佇列";
+                document.getElementById("hw-feedback-detail").innerHTML = `標準答案：<strong>${hwCurrentItem.kana}</strong> ${hwCurrentItem.kanji ? '(' + hwCurrentItem.kanji + ')' : ''}`;
+
+                const existIdx = hwMissedQuestions.findIndex(q => q.kana === hwCurrentItem.kana);
+                if (existIdx === -1) hwMissedQuestions.push(hwCurrentItem);
+            }
+            updateHwBadge();
+        }
+
+        /* --- 4. 動詞變化區塊 --- */
+        function renderVerbQuestion() {
+            const item = verbs[currentVerbIdx];
+            document.getElementById("verb-group").innerText = item.group;
+            document.getElementById("verb-masu").innerText = `${item.masu} ${item.kanji ? '(' + item.kanji + ')' : ''}`;
+            document.getElementById("verb-meaning").innerText = `中文意思：${item.zh}`;
+            
+            document.getElementById("verb-ans-masu").innerText = item.masu;
+            document.getElementById("verb-ans-dict").innerText = item.dict;
+            document.getElementById("verb-ans-nai").innerText = item.nai;
+            document.getElementById("verb-ans-tai").innerText = `${item.tai}です`;
+            
+            document.getElementById("verb-answer-container").style.display = "none";
+        }
+
+        function nextVerbQuestion() {
+            currentVerbIdx = (currentVerbIdx + 1) % verbs.length;
+            renderVerbQuestion();
+        }
+
+        function prevVerbQuestion() {
+            currentVerbIdx = (currentVerbIdx - 1 + verbs.length) % verbs.length;
+            renderVerbQuestion();
+        }
+
+        function toggleVerbAnswer() {
+            const box = document.getElementById("verb-answer-container");
+            box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+        }
+
+        function speakCurrentVerb() {
+            speakText(verbs[currentVerbIdx].masu);
+        }
+
+        /* --- 5. 單字列表與搜尋 --- */
+        function renderTable(data) {
+            const tbody = document.getElementById("word-table-body");
+            tbody.innerHTML = "";
+            data.forEach(item => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><button class="btn-sound" onclick="speakText('${item.kana}')">🔊</button></td>
+                    <td><strong>${item.kana}</strong></td>
+                    <td>${item.kanji || '-'}</td>
+                    <td>${item.zh}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterWords() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const filtered = vocabulary.filter(item => 
+                item.kana.toLowerCase().includes(query) || 
+                item.kanji.toLowerCase().includes(query) || 
+                item.zh.includes(query)
+            );
+            renderTable(filtered);
+        }
+
+        window.onload = function() {
+            renderVocabQuestion();
+            renderSentenceQuestion();
+            nextHandwritingQuestion();
+            renderVerbQuestion();
+            renderTable(vocabulary);
+        };
+    </script>
+</body>
+</html>
